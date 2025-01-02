@@ -1,25 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import AdminLogin from './Components/adminLogin';
+import AdminDashboard from './Components/adminDashboard';
+import HomePage from './Components/homePage';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+const data = {
+  fullname: 'John Doe',
+  password: 'pass123'
+}
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<AdminLogin userFullname={data.fullname} userPassword={data.password}/>} />
+        <Route path="/admin" element={<AdminDashboard />} />  
+        <Route path="/home" element={<HomePage />} />  
+      </Routes>
+    </BrowserRouter>
+    
   );
 }
 
