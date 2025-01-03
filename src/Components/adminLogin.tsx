@@ -16,7 +16,7 @@ type userDetail = {
 
 
 
-export default function OutlinedCard({userFullname, userPassword }: userDetail) {
+export default function OutlinedCard({userFullname, userPassword }: Readonly<userDetail>) {
 
   const [userInputFullname, setUserInputFullname] = useState<string>('')
   const [userInputPassword, setUserInputPassword] = useState<string>('')
@@ -43,6 +43,7 @@ export default function OutlinedCard({userFullname, userPassword }: userDetail) 
 
   return (
     <Box sx={{ minWidth: 275 }}>
+      <Typography variant="h4" sx={{textAlign:'center'}}>Admin Login</Typography>
       <Card sx={{maxHeight:'500px', width:'500px', position:'absolute', top:'20%', left:'33%'}}>
       <CardContent >
         <TextField fullWidth id="fullname" label="Fullname" variant="outlined" onChange={handleNameInputChange}/>
