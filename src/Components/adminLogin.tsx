@@ -1,12 +1,13 @@
 import {useState} from 'react';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
+// import Box from '@mui/material/Box';
+// import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
+// import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { useNavigate } from 'react-router-dom';
-import Typography from '@mui/material/Typography';
+// import Typography from '@mui/material/Typography';
+import { Card, CardContent, CardMedia, Container, Box, Typography } from '@mui/material';
 
 type userDetail = {
   userFullname?: string
@@ -53,12 +54,12 @@ export default function AdminLogin({userFullname, userPassword }: Readonly<userD
         <TextField fullWidth id="password" label="Password" variant="outlined" onChange={handlePasswordInputChange} data-testid="password-input"/>  
       </CardContent>
       <CardActions>
-      <Button variant="contained" onClick={handleAdminLogin} data-testid="continue-button">Continue</Button>
+      <Button variant="contained" id="button" onClick={handleAdminLogin} data-testid="continue-button">Continue</Button>
       </CardActions>
   </Card>
     {error && (
     <CardContent>
-      <Typography color="error">Please try again with correct credentials</Typography>
+      <Typography color="error" data-testid="wrong-credential-message">Please try again with correct credentials</Typography>
     </CardContent>
   )}
 
