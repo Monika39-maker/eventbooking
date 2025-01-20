@@ -1,21 +1,88 @@
-import events, {Event} from '../data/eventsData'
-import React from 'react';
-import { Card, CardContent, Typography, CardMedia, Container, Box, Button, Modal } from '@mui/material';
+import events, {Event, Events} from '../data/eventsData';
+import bookings, { Booking } from '../data/bookings';
+import React, {useState, useMemo} from 'react';
+import { 
+  Card, 
+  CardContent, 
+  Typography, 
+  Container,
+  Box, 
+  Button, 
+  Modal, 
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableContainer, 
+  TableHead, 
+  TableRow, 
+  Paper,
+  TextField
+} from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
 
 
+
 const AdminDashboard: React.FC = () => {
-  const [openBookings, setOpenBookings] = React.useState(false);
-  const handleOpen = () => setOpenBookings(true);
-  const handleClose = () => setOpenBookings(false);
+  const [openBookings, setOpenBookings] = React.useState<boolean>(false);
+  const [selectedEvent, setSelectedEvent] = React.useState<string | null>(null);
+  const [addEventFormOpened, setAddEventFormOpened] = React.useState<boolean>(false);
+  const [allEvents, setAllEvents] = useState<Events>(events);
+  const [formValues, setFormValues] = useState<Event>({
+    id: 0,
+    title: '',
+    date: '',
+    location: '',
+    description: '',
+    kidsPrice: 0,
+    adultPrice: 0,
+  });
+
+  
+  const handleOpen = (eventTitle: string) => {
+    setSelectedEvent(eventTitle);
+    setOpenBookings(true);
+  };
+  const handleClose = () => {
+    setOpenBookings(false);
+    setSelectedEvent(null);
+  };
+
+  const printTable = () => {
+    window.print();
+  };
+
+  const openAddEventForm = () => {
+    setAddEventFormOpened(true);
+  };
+  const closeAddEventForm = () => {
+    setAddEventFormOpened(false);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
+  }
+
+  const handleAddEvent = () => {
+    const newEvent: Event = {
+      ...formValues,
+      id: allEvents.length + 1,
+    };
+    setAllEvents((prevEvents) => [...prevEvents, newEvent]);
+    setAddEventFormOpened(false);
+  };
+
   return (
     <Container sx={{ py: 4 }}>
       <Typography variant="h4" gutterBottom>
         Admin Dashboard
       </Typography>
       <Grid container spacing={4}>
-        {events.map((item: Event) => (
+        {allEvents.map((item: Event) => (
           <Grid key={item.id} >
             <Card>
               {/* <CardMedia component="img" height="140" image={item.image} alt={item.title} /> */}
@@ -33,7 +100,7 @@ const AdminDashboard: React.FC = () => {
                 </Typography>
               </CardContent>
               <Box sx={{display:'flex', flexDirection:'row', alignItems:'space-between', justifyContent:'space-between', margin:'15px'}}>
-                <Button size='small' onClick={handleOpen} variant="contained">View Bookings</Button>
+                <Button size='small' onClick={() => handleOpen(item.title)} variant="contained">View Bookings</Button>
                 <Button size='small' variant="contained">Edit Event</Button>
               </Box>
             </Card>
@@ -41,27 +108,183 @@ const AdminDashboard: React.FC = () => {
             
           </Grid>
         ))}
-        <Card>
+        <Card sx={{cursor:'pointer', minHeight:'250px', minWidth:'250px', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center'}}>
               {/* <CardMedia component="img" height="140" image={item.image} alt={item.title} /> */}
-          <CardContent sx={{cursor:'pointer'}}>
-            + Add Event
+          <CardContent onClick={openAddEventForm}>
+            <Typography variant="h6" color="primary">
+                Add New Event
+            </Typography>
           </CardContent>
         </Card>
       </Grid>
+
+      {/* View Bookings Modal  */}
       <Modal
   open={openBookings}
   onClose={handleClose}
   aria-labelledby="modal-modal-title"
   aria-describedby="modal-modal-description"
 >
-  <Box >
-    <Typography id="modal-modal-title" variant="h6" component="h2">
-      Text in a modal
-    </Typography>
-    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-      Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-    </Typography>
-  </Box>
+  
+<Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+            width: '80%',
+          }}
+        >
+          <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ mb: 2 }}>
+            Bookings for {selectedEvent}
+          </Typography>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Guest Name</TableCell>
+                  <TableCell>Number of Kids</TableCell>
+                  <TableCell>Number of Adults</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {bookings
+                  .filter((booking) => booking.event === selectedEvent)
+                  .map((booking: Booking) => (
+                    <TableRow key={booking.id}>
+                      <TableCell>{booking.guestName}</TableCell>
+                      <TableCell>{booking.numberOfKids}</TableCell>
+                      <TableCell>{booking.numberOfAdults}</TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <Box sx={{ textAlign: 'right', mt: 2 }}>
+            <Button variant="contained" onClick={printTable}>
+              Print
+            </Button>
+          </Box>
+        </Box>
+</Modal>
+
+{/* Add Event form Modal  */}
+<Modal
+  open={addEventFormOpened}
+  onClose={closeAddEventForm}
+  aria-labelledby="modal-modal-title"
+  aria-describedby="modal-modal-description"
+>
+<Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            p: 4,
+            width: 400,
+            maxHeight:'90vh',
+            borderRadius: 2,
+            overflowY:'auto'
+          }}
+        >
+          <Typography variant="h6" gutterBottom>
+            Add Event
+          </Typography>
+          <form>
+            <TextField
+              label="Title of the event"
+              name="title"
+              fullWidth
+              margin="normal"
+              type='text'
+              InputProps={{
+                inputProps: { maxLength: 100 }, // Limit to 50 characters
+              }}
+              // required
+              onChange={handleInputChange}
+            />
+            <TextField
+              label="Date"
+              name="date"
+              fullWidth
+              margin="normal"
+              type='date'
+              // placeholder="Select a date"
+              InputLabelProps={{ shrink: true }}
+              // required
+              onChange={handleInputChange}
+            />
+            <TextField
+              label="Location"
+              name="location"
+              fullWidth
+              margin="normal"
+              type='text'              
+              // required
+              onChange={handleInputChange}
+            />
+            <TextField
+              label="Description with maximum 200 characters"
+              name="description"
+              fullWidth
+              margin="normal"
+              required
+              multiline
+              rows={3}
+              typeof='text'
+              InputProps={{
+                inputProps: { maxLength: 200 }, // Limit to 50 characters
+              }}
+              onChange={handleInputChange}
+            />
+            <TextField
+              label="Kids Price"
+              name="kidsPrice"
+              type="number"
+              fullWidth
+              margin="normal"
+              InputProps={{
+                inputProps: { min: 0 }, // Prevent negative values
+              }}
+              // required
+              onChange={handleInputChange}
+            />
+            <TextField
+              label="Adult Price"
+              name="adultPrice"
+              type="number"
+              fullWidth
+              margin="normal"
+              InputProps={{
+                inputProps: { min: 0 }, // Prevent negative values
+              }}
+              // required
+              onChange={handleInputChange}
+            />
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
+              <Button 
+              variant="outlined" 
+              onClick={() => setAddEventFormOpened(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  setAddEventFormOpened(false);
+                  handleAddEvent();
+                }}
+              >
+                Add
+              </Button>
+            </Box>
+          </form>
+        </Box>
 </Modal>
     </Container>
   );
