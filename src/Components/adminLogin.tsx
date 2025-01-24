@@ -47,7 +47,7 @@ export default function AdminLogin({userFullname, userPassword }: Readonly<userD
         
       </CardContent>
       <CardContent >
-        <TextField fullWidth id="password" label="Password" variant="outlined" onChange={handlePasswordInputChange} data-testid="password-input"/>  
+        <TextField fullWidth id="password" type="password" label="Password" variant="outlined" onChange={handlePasswordInputChange} data-testid="password-input"/>  
       </CardContent>
       <CardActions>
       <Button variant="contained" id="button" onClick={handleAdminLogin} data-testid="continue-button">Continue</Button>

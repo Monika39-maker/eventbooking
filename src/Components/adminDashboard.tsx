@@ -79,12 +79,28 @@ const AdminDashboard: React.FC = () => {
   }
 
   const handleAddEvent = () => {
+    // Check if all required fields are filled
+    if (!formValues.title || !formValues.date || !formValues.location || 
+        formValues.kidsPrice <= 0 || formValues.adultPrice <= 0) {
+      return; // Don't close modal or add event if validation fails
+    }
+
     const newEvent: Event = {
       ...formValues,
       id: allEvents.length + 1,
     };
     setAllEvents((prevEvents) => [...prevEvents, newEvent]);
-    setAddEventFormOpened(false);
+    setAddEventFormOpened(false); // Only close modal if validation passes
+    // Reset form values
+    setFormValues({
+      id: 0,
+      title: '',
+      date: '',
+      location: '',
+      description: '',
+      kidsPrice: 0,
+      adultPrice: 0,
+    });
   };
 
   
@@ -118,25 +134,29 @@ const AdminDashboard: React.FC = () => {
   };
 
   return (
-    <Container sx={{ py: 4 }}>
+    <Container data-testid="adminDashboard-component" sx={{ py: 4 }}>
       <Typography variant="h4" gutterBottom>
         Admin Dashboard
       </Typography>
-      <Grid container spacing={4}>
+      <Grid container spacing={4} data-testid="events-grid">
         {allEvents.map((item: Event) => (
-          <Grid key={item.id} >
-            <Card>
+          <Grid key={item.id}>
+            <Card role="article">
               {/* <CardMedia component="img" height="140" image={item.image} alt={item.title} /> */}
               <CardContent>
-                <Typography variant="h6">{item.title}</Typography>
-                <Typography variant="body2" color="textSecondary">
+                <Typography variant="h6" data-testid="event-title">
+                  {item.title}
+                </Typography>
+                <Typography variant="body2" color="textSecondary" data-testid="event-date">
                   Date: {item.date}
                 </Typography>
-                <Typography variant="body2" color="textSecondary">
+                <Typography variant="body2" color="textSecondary" data-testid="event-location">
                   Location: {item.location}
                 </Typography>
-                <Typography variant="body2">{item.description}</Typography>
-                <Typography variant="body2" color="primary">
+                <Typography variant="body2" data-testid="event-description">
+                  {item.description}
+                </Typography>
+                <Typography variant="body2" color="primary" data-testid="event-prices">
                   Kids Price: {item.kidsPrice} | Adult Price: {item.adultPrice}
                 </Typography>
               </CardContent>
@@ -152,7 +172,7 @@ const AdminDashboard: React.FC = () => {
         ))}
         <Card sx={{cursor:'pointer', minHeight:'250px', minWidth:'250px', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center'}}>
               {/* <CardMedia component="img" height="140" image={item.image} alt={item.title} /> */}
-          <CardContent onClick={openAddEventForm}>
+          <CardContent onClick={openAddEventForm} data-testid="add-event-button">
             <Typography variant="h6" color="primary">
                 Add New Event
             </Typography>
@@ -216,8 +236,8 @@ const AdminDashboard: React.FC = () => {
       <Modal
         open={addEventFormOpened}
         onClose={closeAddEventForm}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+        aria-labelledby="add-event-modal-title"
+        data-testid="add-event-modal"
       >
         <Box
           sx={{
@@ -226,6 +246,7 @@ const AdminDashboard: React.FC = () => {
             left: '50%',
             transform: 'translate(-50%, -50%)',
             bgcolor: 'background.paper',
+            boxShadow: 24,
             p: 4,
             width: 400,
             maxHeight:'90vh',
@@ -233,95 +254,81 @@ const AdminDashboard: React.FC = () => {
             overflowY:'auto'
           }}
         >
-          <Typography variant="h6" gutterBottom>
-            Add Event
+          <Typography variant="h6" component="h2" gutterBottom data-testid="modal-title">
+            Add New Event
           </Typography>
           <form>
             <TextField
-              label="Title of the event"
+              fullWidth
+              label="Title"
               name="title"
-              fullWidth
-              margin="normal"
-              type='text'
-              InputProps={{
-                inputProps: { maxLength: 100 }, // Limit to 50 characters
-              }}
-              // required
+              value={formValues.title}
               onChange={handleInputChange}
-            />
-            <TextField
-              label="Date"
-              name="date"
-              fullWidth
-              margin="normal"
-              type='date'
-              // placeholder="Select a date"
-              InputLabelProps={{ shrink: true }}
-              // required
-              onChange={handleInputChange}
-            />
-            <TextField
-              label="Location"
-              name="location"
-              fullWidth
-              margin="normal"
-              type='text'              
-              // required
-              onChange={handleInputChange}
-            />
-            <TextField
-              label="Description with maximum 200 characters"
-              name="description"
-              fullWidth
               margin="normal"
               required
-              multiline
-              rows={3}
-              typeof='text'
-              InputProps={{
-                inputProps: { maxLength: 200 }, // Limit to 50 characters
-              }}
-              onChange={handleInputChange}
+              data-testid="title-field"
             />
             <TextField
+              fullWidth
+              label="Date"
+              name="date"
+              type="date"
+              value={formValues.date}
+              onChange={handleInputChange}
+              margin="normal"
+              InputLabelProps={{ shrink: true }}
+              required
+              data-testid="date-field"
+            />
+            <TextField
+              fullWidth
+              label="Location"
+              name="location"
+              value={formValues.location}
+              onChange={handleInputChange}
+              margin="normal"
+              required
+              data-testid="location-field"
+            />
+            <TextField
+              fullWidth
+              label="Description"
+              name="description"
+              value={formValues.description}
+              onChange={handleInputChange}
+              margin="normal"
+              multiline
+              rows={4}
+              data-testid="description-field"
+            />
+            <TextField
+              fullWidth
               label="Kids Price"
               name="kidsPrice"
               type="number"
-              fullWidth
-              margin="normal"
-              InputProps={{
-                inputProps: { min: 0 }, // Prevent negative values
-              }}
-              // required
+              value={formValues.kidsPrice}
               onChange={handleInputChange}
+              margin="normal"
+              required
+              data-testid="kids-price-field"
             />
             <TextField
+              fullWidth
               label="Adult Price"
               name="adultPrice"
               type="number"
-              fullWidth
-              margin="normal"
-              InputProps={{
-                inputProps: { min: 0 }, // Prevent negative values
-              }}
-              // required
+              value={formValues.adultPrice}
               onChange={handleInputChange}
+              margin="normal"
+              required
+              data-testid="adult-price-field"
             />
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
-              <Button 
-              variant="outlined" 
-              onClick={() => setAddEventFormOpened(false)}
-              >
+            <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+              <Button onClick={closeAddEventForm} data-testid="cancel-button">
                 Cancel
               </Button>
-              <Button
-                variant="contained"
-                onClick={() => {
-                  setAddEventFormOpened(false);
-                  handleAddEvent();
-                }}
-              >
-                Add
+              <Button onClick={handleAddEvent} variant="contained" data-testid="submit-button">
+                Add Event
               </Button>
             </Box>
           </form>
@@ -349,7 +356,7 @@ const AdminDashboard: React.FC = () => {
             overflowY:'auto'
           }}
         >
-          <Typography variant="h6" gutterBottom>
+          <Typography variant="h6" gutterBottom data-testid="modal-title">
             Edit Event
           </Typography>
           <form>
@@ -365,6 +372,7 @@ const AdminDashboard: React.FC = () => {
               }}
               // required
               onChange={handleInputChange}
+              data-testid="title-field"
             />
             <TextField
               label="Date"
@@ -377,6 +385,7 @@ const AdminDashboard: React.FC = () => {
               InputLabelProps={{ shrink: true }}
               // required
               onChange={handleInputChange}
+              data-testid="date-field"
             />
             <TextField
               label="Location"
@@ -387,6 +396,7 @@ const AdminDashboard: React.FC = () => {
               defaultValue={selectedEvent?.location}             
               // required
               onChange={handleInputChange}
+              data-testid="location-field"
             />
             <TextField
               label="Description with maximum 200 characters"
@@ -402,6 +412,7 @@ const AdminDashboard: React.FC = () => {
                 inputProps: { maxLength: 200 }, // Limit to 200 characters
               }}
               onChange={handleInputChange}
+              data-testid="description-field"
             />
             <TextField
               label="Kids Price"
@@ -415,6 +426,7 @@ const AdminDashboard: React.FC = () => {
               defaultValue={selectedEvent?.kidsPrice}
               // required
               onChange={handleInputChange}
+              data-testid="kids-price-field"
             />
             <TextField
               label="Adult Price"
@@ -428,6 +440,7 @@ const AdminDashboard: React.FC = () => {
               defaultValue={selectedEvent?.adultPrice}
               // required
               onChange={handleInputChange}
+              data-testid="adult-price-field"
             />
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
               <Button 
@@ -451,5 +464,3 @@ const AdminDashboard: React.FC = () => {
 };
 
 export default AdminDashboard;
-
-
