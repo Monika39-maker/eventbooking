@@ -165,7 +165,7 @@ const AdminDashboard: React.FC = () => {
                 size='small' 
                 onClick={() => handleOpen(item.title)} 
                 variant="contained">View Bookings</Button>
-                <Button size='small' variant="contained" onClick={() => handleOpenEditEventForm(item.title)}>Edit Event</Button>
+                <Button data-testid="edit-event-button" size='small' variant="contained" onClick={() => handleOpenEditEventForm(item.title)}>Edit Event</Button>
               </Box>
             </Card>  
           </Grid>
@@ -341,6 +341,7 @@ const AdminDashboard: React.FC = () => {
         onClose={closeEditEventForm}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
+        data-testid="edit-event-modal"
       >
         <Box
           sx={{
@@ -445,13 +446,15 @@ const AdminDashboard: React.FC = () => {
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
               <Button 
               variant="outlined" 
-              onClick={() => setAddEventFormOpened(false)}
+              onClick={() => setEditEventFormOpened(false)}
+              data-testid="cancel-button"
               >
                 Cancel
               </Button>
               <Button
                 variant="contained"
                 onClick={handleEditEvent}
+                data-testid="submit-button"
               >
                 edit
               </Button>

@@ -16,6 +16,7 @@ const renderWithRouter = (ui: React.ReactElement) => {
 
 describe('AdminDashboard Component Rendering', () => {
   beforeEach(() => {
+    // eslint-disable-next-line testing-library/no-render-in-setup
     renderWithRouter(<AdminDashboard />);
   });
 
@@ -158,3 +159,77 @@ describe('Add Event Functionality', () => {
     });
   });
 });
+
+//test edit event functionality
+describe('Edit Event Functionality', () => {
+  beforeEach(async () => {
+    renderWithRouter(<AdminDashboard />);
+    // Open the modal before each test
+    const editButtons = screen.getAllByText(/edit/i);
+    fireEvent.click(editButtons[0]);
+    // Wait for modal to be visible
+    await waitFor(() => {
+      expect(screen.getByTestId('edit-event-modal')).toBeInTheDocument();
+    });
+  });
+
+  test('should open the edit event modal when Edit button is clicked', () => {
+    const modal = screen.getByTestId('edit-event-modal');
+    expect(modal).toBeInTheDocument();
+  });
+  
+  test('should close the modal when cancel button is clicked', async () => {
+    const cancelButton = screen.getByTestId('cancel-button');
+    fireEvent.click(cancelButton);
+
+    // Check if modal is no longer in the document
+    await waitFor(() => {
+      expect(screen.queryByTestId('edit-event-modal')).not.toBeInTheDocument();
+    });
+  });
+
+  test('The edit form should be pre-filled with the data', () => {
+    const titleField = screen.getByTestId('title-field').querySelector('input');
+    const dateField = screen.getByTestId('date-field').querySelector('input');
+    const locationField = screen.getByTestId('location-field').querySelector('input');
+    const kidsPriceField = screen.getByTestId('kids-price-field').querySelector('input');
+    const adultPriceField = screen.getByTestId('adult-price-field').querySelector('input');
+
+    expect(titleField).toHaveValue('Teej Party');
+    expect(dateField).toHaveValue('2023-08-01');
+    expect(locationField).toHaveValue('Teej, TN');
+    expect(kidsPriceField).toHaveValue(10);
+    expect(adultPriceField).toHaveValue(15);
+  })
+
+  test('should update an event when form is submitted with valid data', async () => {
+    // Fill in the form
+    const titleField = screen.getByTestId('title-field').querySelector('input');
+    const dateField = screen.getByTestId('date-field').querySelector('input');
+    const locationField = screen.getByTestId('location-field').querySelector('input');
+    const kidsPriceField = screen.getByTestId('kids-price-field').querySelector('input');
+    const adultPriceField = screen.getByTestId('adult-price-field').querySelector('input');
+
+    if (titleField && dateField && locationField && kidsPriceField && adultPriceField) {
+      fireEvent.change(titleField, { target: { value: 'Updated Test Event' } });
+      fireEvent.change(dateField, { target: { value: '2024-12-26' } });
+      fireEvent.change(locationField, { target: { value: 'Updated Test Location' } });
+      fireEvent.change(kidsPriceField, { target: { value: '15' } });
+      fireEvent.change(adultPriceField, { target: { value: '25' } });
+    }
+
+    // Submit the form
+    const submitButton = screen.getByTestId('submit-button');
+    fireEvent.click(submitButton);
+
+    // Verify the event is updated
+    await waitFor(() => {
+      const updatedEventTitle = screen.getByText('Updated Test Event');
+      expect(updatedEventTitle).toBeInTheDocument();  
+    }); 
+  });
+
+  
+});
+
+
