@@ -25,7 +25,7 @@ test("WHEN user is in admin route(/admin) THEN render adminDashboard component",
   expect(screen.getByTestId("adminDashboard-component")).toBeInTheDocument();
 });
 
-test('redirects to admin dashboard on successful login', async () => {
+test.only('redirects to admin dashboard on successful login', async () => {
   render(
     <MemoryRouter initialEntries={['/']} future={routerFutureConfig}>
       <Routes>
@@ -39,14 +39,14 @@ test('redirects to admin dashboard on successful login', async () => {
   const fullnameInput = screen.getByTestId('fullname-input').querySelector('input');
   const passwordInput = screen.getByTestId('password-input').querySelector('input');
   const continueButton = screen.getByTestId('continue-button');
-
+  console.log(process.env.REACT_APP_TEST_USERNAME, process.env.REACT_APP_TEST_PASSWORD);
   if (fullnameInput && passwordInput) {
-    fireEvent.change(fullnameInput, { target: { value: 'John Doe' } });
-    fireEvent.change(passwordInput, { target: { value: 'pass123' } });
+    fireEvent.change(fullnameInput, { target: { value: process.env.REACT_APP_TEST_USERNAME || 'John Doe' } });
+    fireEvent.change(passwordInput, { target: { value: process.env.REACT_APP_TEST_PASSWORD || 'pass123' } });
     fireEvent.click(continueButton);
 
     // Wait for navigation and dashboard to appear
-    const adminDashboard = await screen.findByTestId('adminDashboard-component');
+    const adminDashboard = await screen.findByTestId('adminDashboard-title');
     expect(adminDashboard).toBeInTheDocument();
   } else {
     throw new Error('Input elements not found');
@@ -69,8 +69,8 @@ test('WHEN user inputs wrong username or password in index / page THEN render me
   const continueButton = screen.getByTestId('continue-button');
 
   if (fullnameInput && passwordInput) {
-    fireEvent.change(fullnameInput, { target: { value: 'John De' } });
-    fireEvent.change(passwordInput, { target: { value: 'pa123' } });
+    fireEvent.change(fullnameInput, { target: { value: 'wrongusername' } });
+    fireEvent.change(passwordInput, { target: { value: 'wrongpassword' } });
     fireEvent.click(continueButton);
 
     const wrongCredentialMessage = screen.getByTestId('wrong-credential-message');

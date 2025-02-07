@@ -2,6 +2,7 @@ import './App.css';
 import AdminLogin from './Components/adminLogin';
 import AdminDashboard from './Components/adminDashboard';
 import HomePage from './Components/homePage';
+import EventList from './Components/EventList';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 const data = {
@@ -19,6 +20,7 @@ function App() {
         <Route path="/" element={<AdminLogin userFullname={data.fullname} userPassword={data.password}/>} />
         <Route path="/admin" element={<AdminDashboard />} />  
         <Route path="/home" element={<HomePage />} />  
+        <Route path="/events" element={<EventList />} />
       </Routes>
     </BrowserRouter>
   );

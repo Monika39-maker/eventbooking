@@ -27,7 +27,7 @@ const  events: Events= [
         title:'Dashain Celebration',
         date: '2023-08-02',
         location: 'Dashain, Nepal',
-        description: 'Come join us for a fun-filled day of music and food!',
+        description: 'Enjoy a day of music, food, and celebration!',
         kidsPrice: 10.00,
         adultPrice: 15.00,
     },
@@ -36,7 +36,7 @@ const  events: Events= [
         title:'Christmas Celebration',
         date: '2023-12-25',
         location: 'Christmas, TN',
-        description: 'Come join us for a fun-filled day of music and food!',
+        description: 'Let celebrate together',
         kidsPrice: 10.00,
         adultPrice: 15.00,
     }
