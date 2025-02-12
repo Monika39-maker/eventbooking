@@ -1,11 +1,13 @@
 // express backend 
 import express, { Response } from 'express';
+import cors from 'cors';
 const app = express();
 const port = 8000;
 
+// Enable CORS
+app.use(cors());
 
-
-
+// Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -56,12 +58,13 @@ const  events: Events= [
 
 
 
-app.get('/', (req, res: Response) => {
-  res.send(events);
+// Change the endpoint to match frontend
+app.get('/events', (req, res: Response) => {
+  res.json(events);
 });
 
 
 
 app.listen(port, () => {
-  console.log(`Server running at XXXXXXXXXXXXXXXX:${port}`);
+  console.log(`Server running at http://localhost:${port}`);
 });
