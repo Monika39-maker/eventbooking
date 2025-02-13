@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/events-booking-app/static/css/main.4b81d62d.css",
+    "main.js": "/events-booking-app/static/js/main.6d032214.js",
+    "static/js/511.67a4570c.chunk.js": "/events-booking-app/static/js/511.67a4570c.chunk.js",
+    "index.html": "/events-booking-app/index.html",
+    "main.4b81d62d.css.map": "/events-booking-app/static/css/main.4b81d62d.css.map",
+    "main.6d032214.js.map": "/events-booking-app/static/js/main.6d032214.js.map",
+    "511.67a4570c.chunk.js.map": "/events-booking-app/static/js/511.67a4570c.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.4b81d62d.css",
+    "static/js/main.6d032214.js"
+  ]
+}
