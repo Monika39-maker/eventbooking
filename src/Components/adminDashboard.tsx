@@ -1,6 +1,4 @@
-import events, {Event, Events} from '../data/eventsData';
-import bookings, { Booking } from '../data/bookings';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { 
   Card, 
   CardContent, 
@@ -20,6 +18,25 @@ import {
   Grid
 } from '@mui/material';
 
+export type Event = {
+  id: number;
+  title: string;
+  date: string;
+  location: string;
+  description: string;
+  kidsPrice: number;
+  adultPrice: number;
+}
+
+export type Events = Event[]
+export type Booking = {
+  id: number;
+  guestName: string;
+  numberOfKids: number;
+  numberOfAdults: number;
+  event: string;
+}
+
 const AdminDashboard: React.FC = () => {
   const [openBookings, setOpenBookings] = React.useState<boolean>(false);
   const [selectedEvent, setSelectedEvent] = React.useState<null | Event>({
@@ -34,7 +51,7 @@ const AdminDashboard: React.FC = () => {
   const [selectedEventTitle, setSelectedEventTitle] = React.useState<string | null>(null);
   const [addEventFormOpened, setAddEventFormOpened] = React.useState<boolean>(false);
   const [editEventFormOpened, setEditEventFormOpened] = React.useState<boolean>(false);
-  const [allEvents, setAllEvents] = useState<Events>(events);
+  const [allEvents, setAllEvents] = useState<Events>([]);
   const [formValues, setFormValues] = useState<Event>({
     id: 0,
     title: '',
@@ -44,7 +61,44 @@ const AdminDashboard: React.FC = () => {
     kidsPrice: 0,
     adultPrice: 0,
   });
-  
+  const [bookings, setBookings] = useState<Booking[]>([]);
+
+  useEffect(() => {
+    fetch('http://localhost:8000/events')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        setAllEvents(data);
+      })
+      .catch(error => {
+        console.error('Error fetching events:', error);
+        // Set empty array to prevent undefined errors
+        setAllEvents([]);
+      });
+  }, []); 
+
+  useEffect(() => {
+    fetch('http://localhost:8000/bookings')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        setBookings(data);
+      })
+      .catch(error => {
+        console.error('Error fetching bookings:', error);
+        // Set empty array to prevent undefined errors
+        setBookings([]);
+      });
+  }, []); // Empty dependency array means this runs once on mount
+
   const handleOpen = (eventTitle:string) => {
     setSelectedEventTitle(eventTitle);
     setOpenBookings(true);

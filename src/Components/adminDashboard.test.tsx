@@ -3,6 +3,57 @@ import AdminDashboard from './adminDashboard';
 import '@testing-library/jest-dom';
 import { BrowserRouter } from 'react-router-dom';
 
+// Mock data that matches your backend structure
+const mockEvents = [
+  {
+    id: 1,
+    title: 'Teej Party',
+    date: '2023-08-01',
+    location: 'Teej, TN',
+    description: 'Come join us for a fun-filled day of music and food!',
+    kidsPrice: 10,
+    adultPrice: 15,
+  }
+];
+
+const mockBookings = [
+  {
+    id: 1,
+    guestName: "Test Guest",
+    numberOfKids: 2,
+    numberOfAdults: 2,
+    event: "Teej Party"
+  }
+];
+
+// Mock fetch before all tests
+beforeEach(() => {
+  // Reset all mocks before each test
+  jest.resetAllMocks();
+  
+  // Mock the global fetch
+  global.fetch = jest.fn((url) => {
+    if (url.includes('/events')) {
+      return Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve(mockEvents),
+      });
+    }
+    if (url.includes('/bookings')) {
+      return Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve(mockBookings),
+      });
+    }
+    return Promise.reject(new Error('Not found'));
+  }) as jest.Mock;
+});
+
+// Clean up after all tests
+afterAll(() => {
+  jest.restoreAllMocks();
+});
+
 const renderWithRouter = (ui: React.ReactElement) => {
   return render(
     <BrowserRouter future={{
@@ -15,9 +66,12 @@ const renderWithRouter = (ui: React.ReactElement) => {
 };
 
 describe('AdminDashboard Component Rendering', () => {
-  beforeEach(() => {
-    // eslint-disable-next-line testing-library/no-render-in-setup
+  beforeEach(async () => {
     renderWithRouter(<AdminDashboard />);
+    // Wait for the events to be loaded
+    await waitFor(() => {
+      expect(screen.getByText('Teej Party')).toBeInTheDocument();
+    });
   });
 
   test('should render the admin dashboard heading', () => {
@@ -49,16 +103,10 @@ describe('AdminDashboard Component Rendering', () => {
     expect(eventDates.length).toBe(eventTitles.length);
     expect(eventLocations.length).toBe(eventTitles.length);
     expect(eventPrices.length).toBe(eventTitles.length);
-
-    // Check content of the first event card
-    expect(eventTitles[0]).toBeInTheDocument();
-    expect(eventDates[0]).toBeInTheDocument();
-    expect(eventLocations[0]).toBeInTheDocument();
-    expect(eventPrices[0]).toBeInTheDocument();
   });
 
   test('should render action buttons for each event', () => {
-    const editButtons = screen.getAllByText(/edit/i);
+    const editButtons = screen.getAllByText(/edit event/i);
     const viewBookingsButtons = screen.getAllByText(/view bookings/i);
 
     expect(editButtons.length).toBeGreaterThan(0);
@@ -69,6 +117,10 @@ describe('AdminDashboard Component Rendering', () => {
 describe('Add Event Functionality', () => {
   beforeEach(async () => {
     renderWithRouter(<AdminDashboard />);
+    // Wait for initial data load
+    await waitFor(() => {
+      expect(screen.getByText('Teej Party')).toBeInTheDocument();
+    });
     // Open the modal before each test
     const addEventButton = screen.getByTestId('add-event-button');
     fireEvent.click(addEventButton);
@@ -160,13 +212,16 @@ describe('Add Event Functionality', () => {
   });
 });
 
-//test edit event functionality
 describe('Edit Event Functionality', () => {
   beforeEach(async () => {
     renderWithRouter(<AdminDashboard />);
-    // Open the modal before each test
-    const editButtons = screen.getAllByText(/edit/i);
-    fireEvent.click(editButtons[0]);
+    // Wait for initial data load
+    await waitFor(() => {
+      expect(screen.getByText('Teej Party')).toBeInTheDocument();
+    });
+    // Find and click the edit button
+    const editButton = screen.getAllByText(/edit event/i)[0];
+    fireEvent.click(editButton);
     // Wait for modal to be visible
     await waitFor(() => {
       expect(screen.getByTestId('edit-event-modal')).toBeInTheDocument();
@@ -177,7 +232,7 @@ describe('Edit Event Functionality', () => {
     const modal = screen.getByTestId('edit-event-modal');
     expect(modal).toBeInTheDocument();
   });
-  
+
   test('should close the modal when cancel button is clicked', async () => {
     const cancelButton = screen.getByTestId('cancel-button');
     fireEvent.click(cancelButton);
@@ -228,8 +283,4 @@ describe('Edit Event Functionality', () => {
       expect(updatedEventTitle).toBeInTheDocument();  
     }); 
   });
-
-  
 });
-
-
