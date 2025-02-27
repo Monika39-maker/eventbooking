@@ -8,7 +8,7 @@ services:
     ports:
       - "80:80"
     environment:
-      - REACT_APP_API_URL=http://localhost:3000
+      - REACT_APP_API_URL=http://localhost:8000
     depends_on:
       - backend
 
@@ -17,8 +17,8 @@ services:
       context: ./Backend
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "8000:8000"
     environment:
       - NODE_ENV=production
-      - PORT=3000
+      - PORT=8000
       - CORS_ORIGIN=http://localhost
