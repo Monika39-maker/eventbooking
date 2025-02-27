@@ -82,7 +82,7 @@ const AdminDashboard: React.FC = () => {
   }, []); 
 
   useEffect(() => {
-    fetch('http://localhost:8000/booking')
+    fetch('http://localhost:8000/bookings')
       .then(response => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
