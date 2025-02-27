@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: events-booking-backend
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: NODE_ENV
+        value: production
+      - key: CORS_ORIGIN
+        value: https://Monika39-maker.github.io

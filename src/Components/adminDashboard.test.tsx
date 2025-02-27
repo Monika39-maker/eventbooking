@@ -73,6 +73,7 @@ describe('AdminDashboard Component Rendering', () => {
     await waitFor(() => {
       expect(screen.getByText('Teej Party')).toBeInTheDocument();
     });
+
   });
 
   test('should render the admin dashboard heading', () => {
