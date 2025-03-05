@@ -25,4 +25,5 @@ yarn-error.log*
 
 /Backend/package-lock.json
 /Backend/node_modules
+/Backend/.env
 
