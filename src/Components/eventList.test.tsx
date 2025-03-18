@@ -45,8 +45,8 @@ describe('EventList Rendered correctly', () => {
             expect(date).toBeInTheDocument();
             expect(location).toBeInTheDocument();
             expect(description).toBeInTheDocument();
-            expect(priceSection).toHaveTextContent(`Adults: $${event.adultPrice}`);
-            expect(priceSection).toHaveTextContent(`Kids: $${event.kidsPrice}`);
+            expect(priceSection).toHaveTextContent(`Adults: $${event.adult_Price}`);
+            expect(priceSection).toHaveTextContent(`Kids: $${event.kids_Price}`);
             expect(bookEventButton).toBeInTheDocument();
         });
 

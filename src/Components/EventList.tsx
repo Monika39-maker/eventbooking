@@ -1,5 +1,5 @@
-import React from 'react';
-import events, { Event } from '../data/eventsData';
+import React, { useEffect, useState } from 'react';
+import { Event } from '../data/eventsData';
 import {
   Card,
   CardContent,
@@ -10,14 +10,41 @@ import {
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+
 const EventList: React.FC = () => {
+  const [events, setEvents] = useState<Event[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
+  const fetchEvents = async () => {
+    try {
+      const response = await fetch(`${API_URL}/events`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch events');
+      }
+      const data = await response.json();
+      setEvents(data);
+      setError(null);
+    } catch (err) {
+      setError('Failed to load events. Please try again later.');
+      console.error('Error fetching events:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleEventBooking = (event: Event) => {
     console.log('Event booked:', event);
     // Add your booking logic here
   };
 
   return (
-    <Container data-testid="eventList-component" >
+    <Container data-testid="eventList-component">
       <Box sx={{ my: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom align="center" >
           Available Events
@@ -42,9 +69,9 @@ const EventList: React.FC = () => {
                   <Typography data-testid={`event-adults-price-${event.id}`}>
                     <strong>Prices:</strong>
                     <br />
-                    Adults: ${event.adultPrice}
+                    Adults: ${event.adult_price.toFixed(2)}
                     <br />
-                    Kids: ${event.kidsPrice}
+                    Kids: ${event.kids_price.toFixed(2)}
                   </Typography>
                 </CardContent>
                 <Box sx={{ p: 2, display: 'flex', justifyContent: 'center' }}>
