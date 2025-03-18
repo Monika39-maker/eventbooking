@@ -64,7 +64,7 @@ const AdminDashboard: React.FC = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);
 
   useEffect(() => {
-    fetch('http://localhost:8000/events')
+    fetch('https://eventbooking-api.onrender.com/events')
       .then(response => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
