@@ -10,12 +10,10 @@ import {
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const API_URL = 'https://eventbooking-api.onrender.com';
 
 const EventList: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchEvents();
@@ -29,12 +27,8 @@ const EventList: React.FC = () => {
       }
       const data = await response.json();
       setEvents(data);
-      setError(null);
     } catch (err) {
-      setError('Failed to load events. Please try again later.');
       console.error('Error fetching events:', err);
-    } finally {
-      setLoading(false);
     }
   };
 

@@ -109,9 +109,6 @@ const AdminDashboard: React.FC = () => {
     setSelectedEventTitle(null);
   };
 
-  const printTable = () => {
-    window.print();
-  };
 
   const openAddEventForm = () => {
     setAddEventFormOpened(true);
