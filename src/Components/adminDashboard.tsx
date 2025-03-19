@@ -246,7 +246,7 @@ const AdminDashboard: React.FC = () => {
                     variant="contained" 
                     onClick={() => handleOpenEditEventForm(item.title)}
                   >
-                    Edit Event
+                    Edit Events.....
                   </Button>
                 </Box>
               </Card>  
