@@ -24,6 +24,14 @@ export type Event = {
 
 export type Events = Event[]
 
+export type Booking = {
+  id: number;
+  guestName: string;
+  numberOfKids: number;
+  numberOfAdults: number;
+  event: string;
+}
+
 const  events: Events= [
   {
       id:1,
@@ -56,11 +64,39 @@ const  events: Events= [
   }
 ]
 
+const bookings: Booking[] = [
+  {
+    id: 1,
+    guestName: 'John Doe',
+    numberOfKids: 2,
+    numberOfAdults: 1,
+    event: 'Teej Party'
+  },
+  {
+    id: 2,
+    guestName: 'Jane Smith',
+    numberOfKids: 1,
+    numberOfAdults: 2,
+    event: 'Dashain Celebration'
+  },
+  {
+    id: 3,
+    guestName: 'Bob Johnson',
+    numberOfKids: 0,
+    numberOfAdults: 3,
+    event: 'Christmas Celebration'
+  }
+];
+
 
 
 // Change the endpoint to match frontend
 app.get('/events', (req, res: Response) => {
   res.json(events);
+});
+
+app.get('/bookings', (req, res: Response) => {
+  res.json(bookings);
 });
 
 

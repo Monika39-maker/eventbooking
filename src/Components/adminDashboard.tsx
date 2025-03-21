@@ -61,10 +61,11 @@ const AdminDashboard: React.FC = () => {
     kidsPrice: 0,
     adultPrice: 0,
   });
+  
   const [bookings, setBookings] = useState<Booking[]>([]);
 
   useEffect(() => {
-    fetch('http://localhost:8000/events')
+    fetch('https://eventbooking-api.onrender.com/events')
       .then(response => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -96,7 +97,22 @@ const AdminDashboard: React.FC = () => {
         console.error('Error fetching bookings:', error);
         // Set empty array to prevent undefined errors
         setBookings([]);
-      });
+      }); 
+      fetch('https://eventbooking-api.onrender.com/bookings')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          setBookings(data);
+        })
+        .catch(error => {
+          console.error('Error fetching bookings:', error);
+          // Set empty array to prevent undefined errors
+          setBookings([]);
+        });
   }, []); // Empty dependency array means this runs once on mount
 
   const handleOpen = (eventTitle:string) => {
