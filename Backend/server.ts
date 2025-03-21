@@ -15,7 +15,7 @@ app.use(cors());
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+console.log(process.env.DATABASE_URL);
 // Database connection
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -57,7 +57,7 @@ export type Booking = {
 
 // Get all events
 app.get('/events', async (req: Request, res: Response) => {
-  res.send(process.env.DATABASE_URL);
+  
   try {
     const result = await pool.query('SELECT * FROM events ORDER BY date');
     res.json(result.rows);
