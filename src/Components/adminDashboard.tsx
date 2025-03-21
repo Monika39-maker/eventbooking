@@ -65,61 +65,29 @@ const AdminDashboard: React.FC = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);
 
   useEffect(() => {
-    fetch('https://eventbooking-api.onrender.com/events')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(data => {
-        setAllEvents(data);
-      })
-      .catch(error => {
-        console.error('Error fetching events:', error);
-        // Set empty array to prevent undefined errors
-        setAllEvents([]);
-      });
-  }, []); 
-
-  useEffect(() => {
-    fetch('http://localhost:8000/bookings')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(data => {
-        setBookings(data);
-      })
-      .catch(error => {
-        console.error('Error fetching bookings:', error);
-        // Set empty array to prevent undefined errors
-        setBookings([]);
-      }); 
+    Promise.all([
+      fetch('https://eventbooking-api.onrender.com/events'),
       fetch('https://eventbooking-api.onrender.com/bookings')
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          return response.json();
-        })
-        .then(data => {
-          setBookings(data);
-        })
-        .catch(error => {
-          console.error('Error fetching bookings:', error);
-          // Set empty array to prevent undefined errors
-          setBookings([]);
-        });
-  }, []); // Empty dependency array means this runs once on mount
+    ])
+      .then(responses => Promise.all(responses.map(res => res.json())))
+      .then(([eventsData, bookingsData]) => {
+        setAllEvents(eventsData);
+        setBookings(bookingsData);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        setAllEvents([]);
+        setBookings([]);
+      });
+  }, []);
+ 
 
   const handleOpen = (eventTitle:string) => {
     setSelectedEventTitle(eventTitle);
     setOpenBookings(true);
+    
   };
-
+  console.log(bookings);
   const handleClose = () => {
     setOpenBookings(false);
     setSelectedEventTitle(null);

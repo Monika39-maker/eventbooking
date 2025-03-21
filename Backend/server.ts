@@ -29,6 +29,7 @@ export type Bookings = {
   guestName: string;
   numberOfKids: number;
   numberOfAdults: number;
+  event: string;
  
 }[]
 
@@ -69,20 +70,22 @@ const bookings: Bookings = [
     id: 1,
     guestName: 'John Doe',
     numberOfKids: 2,
-    numberOfAdults: 1
+    numberOfAdults: 1,
+    event: 'Teej Party'
   },
   {
     id: 2,
     guestName: 'Jane Smith',
     numberOfKids: 1,
-    numberOfAdults: 2
+    numberOfAdults: 2,
+    event: 'Dashain Celebration'
   },
   {
     id: 3,
     guestName: 'Bob Johnson',
     numberOfKids: 0,
-    numberOfAdults: 3
-    
+    numberOfAdults: 3,
+    event: 'Christmas Celebration'
   }
 ];
 
