@@ -24,13 +24,13 @@ export type Event = {
 
 export type Events = Event[]
 
-export type Booking = {
-  id: number;
+export type Bookings = {
+  id?: number;
   guestName: string;
   numberOfKids: number;
   numberOfAdults: number;
-  event: string;
-}
+ 
+}[]
 
 const  events: Events= [
   {
@@ -64,27 +64,25 @@ const  events: Events= [
   }
 ]
 
-const bookings: Booking[] = [
+const bookings: Bookings = [
   {
     id: 1,
     guestName: 'John Doe',
     numberOfKids: 2,
-    numberOfAdults: 1,
-    event: 'Teej Party'
+    numberOfAdults: 1
   },
   {
     id: 2,
     guestName: 'Jane Smith',
     numberOfKids: 1,
-    numberOfAdults: 2,
-    event: 'Dashain Celebration'
+    numberOfAdults: 2
   },
   {
     id: 3,
     guestName: 'Bob Johnson',
     numberOfKids: 0,
-    numberOfAdults: 3,
-    event: 'Christmas Celebration'
+    numberOfAdults: 3
+    
   }
 ];
 
