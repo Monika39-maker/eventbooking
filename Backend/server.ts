@@ -7,7 +7,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 3001;
 
 // Enable CORS
 app.use(cors());
@@ -57,14 +57,14 @@ export type Booking = {
 
 // Get all events
 app.get('/events', async (req: Request, res: Response) => {
-  res.send('Fetching events...');
-  // try {
-  //   const result = await pool.query('SELECT * FROM events ORDER BY date');
-  //   res.json(result.rows);
-  // } catch (err) {
-  //   console.error('Error fetching events:', err);
-  //   res.status(500).json({ error: 'Internal server error' });
-  // }
+  res.send(process.env.DATABASE_URL);
+  try {
+    const result = await pool.query('SELECT * FROM events ORDER BY date');
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error fetching events:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
 // Get all bookings
