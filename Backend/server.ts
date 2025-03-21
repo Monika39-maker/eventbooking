@@ -75,13 +75,43 @@ const bookings: Bookings = [
   },
   {
     id: 2,
-    guestName: 'Jane Smith',
-    numberOfKids: 1,
+    guestName: 'Manisha Dangol',
+    numberOfKids: 2,
     numberOfAdults: 2,
-    event: 'Dashain Celebration'
+    event: 'Teej Party'
   },
   {
     id: 3,
+    guestName: 'Shiva Shrestha',
+    numberOfKids: 3,
+    numberOfAdults: 1,
+    event: 'Teej Party'
+  },
+  {
+    id: 4,
+    guestName: 'John Doe',
+    numberOfKids: 2,
+    numberOfAdults: 1,
+    event: 'Dashain Celebration'
+  },
+  {
+    id: 5,
+    guestName: 'Richa Dangol',
+    numberOfKids: 2,
+    numberOfAdults: 1,
+    event: 'Dashain Celebration'
+  },
+
+  {
+    id: 6,
+    guestName: 'Sahil Kunwar',
+    numberOfKids: 1,
+    numberOfAdults: 2,
+    event: 'Christmas Celebration'
+  },
+
+  {
+    id: 7,
     guestName: 'Bob Johnson',
     numberOfKids: 0,
     numberOfAdults: 3,
