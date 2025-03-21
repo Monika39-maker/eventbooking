@@ -3,7 +3,7 @@ import cors from 'cors';
 import { Pool } from 'pg';
 
 const app = express();
-const port = process.env.PORT || 8000;
+const port = process.env.PORT;
 
 // Enable CORS
 app.use(cors());
@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Database connection
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/eventbooking'
+  connectionString: process.env.DATABASE_URL
 });
 
 // Types
