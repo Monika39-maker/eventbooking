@@ -67,12 +67,12 @@ const AdminDashboard: React.FC = () => {
   useEffect(() => {
     Promise.all([
       fetch('https://eventbooking-api.onrender.com/events'),
-      fetch('https://eventbooking-api.onrender.com/bookings')
+      // fetch('https://eventbooking-api.onrender.com/bookings')
     ])
       .then(responses => Promise.all(responses.map(res => res.json())))
       .then(([eventsData, bookingsData]) => {
         setAllEvents(eventsData);
-        setBookings(bookingsData);
+        // setBookings(bookingsData);
       })
       .catch(error => {
         console.error('Error:', error);
@@ -87,7 +87,7 @@ const AdminDashboard: React.FC = () => {
     setOpenBookings(true);
     
   };
-  console.log(bookings);
+  console.log(allEvents);
   const handleClose = () => {
     setOpenBookings(false);
     setSelectedEventTitle(null);

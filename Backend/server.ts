@@ -24,14 +24,7 @@ const pool = new Pool({
   }
 });
 
-// Test database connection
-pool.connect((err, client, release) => {
-  if (err) {
-    console.error('Error connecting to the database:', err);
-  } else {
-    console.log('Successfully connected to the database');
-  }
-});
+// Test database connec
 
 // Types
 export type Event = {
