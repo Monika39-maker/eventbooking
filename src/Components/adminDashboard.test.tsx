@@ -14,7 +14,25 @@ const mockEvents = [
     description: 'Come join us for a fun-filled day of music and food!',
     kidsPrice: 10,
     adultPrice: 15,
-  }
+  },
+  {
+    id: 2,
+    title: 'Dashain Celebration',
+    date: '2023-08-02',
+    location: 'Dashain, Nepal',
+    description: 'Enjoy a day of music, food, and celebration!',
+    kidsPrice: 10,
+    adultPrice: 15,
+  },
+  {
+    id: 3,
+    title: 'Christmas Celebration',
+    date: '2023-12-25',
+    location: 'Christmas, Nepal',
+    description: 'Let celebrate together',
+    kidsPrice: 10,
+    adultPrice: 15,
+  },
 ];
 
 const mockBookings = [
@@ -66,6 +84,7 @@ const renderWithRouter = (ui: React.ReactElement) => {
   );
 };
 
+
 describe('AdminDashboard Component Rendering', () => {
   beforeEach(async () => {
     renderWithRouter(<AdminDashboard />);
@@ -80,6 +99,12 @@ describe('AdminDashboard Component Rendering', () => {
     const heading = screen.getByText(/admin dashboard/i);
     expect(heading).toBeInTheDocument();
   });
+
+    test('All the events are rendered', () => {
+        renderWithRouter(<AdminDashboard />);
+        const eventCards = screen.getAllByTestId('event-card');
+        expect(eventCards.length).toBe(mockEvents.length);
+    });
 
   test('should render the Add Event button', () => {
     const addEventText = screen.getByText(/add new event/i);

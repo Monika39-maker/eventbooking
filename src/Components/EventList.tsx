@@ -47,7 +47,7 @@ const EventList: React.FC = () => {
           {events.map((event) => (
             <Grid item xs={12} sm={6} md={4} key={event.id}>
               <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }} data-testid="event-card">
-                <CardContent sx={{ flexGrow: 1 }}>
+                <CardContent sx={{ flexGrow: 1 }} >
                   <Typography gutterBottom variant="h5" component="h2">
                     {event.title}
                   </Typography>
