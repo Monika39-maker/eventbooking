@@ -61,20 +61,20 @@ app.get('/events', async (req: Request, res: Response) => {
 });
 
 // Get all bookings
-// app.get('/bookings', async (req: Request, res: Response) => {
-//   try {
-//     const result = await pool.query(`
-//       SELECT b.*, e.title as event_title 
-//       FROM bookings b 
-//       JOIN events e ON b.event_id = e.id 
-//       ORDER BY b.booking_date DESC
-//     `);
-//     res.json(result.rows);
-//   } catch (err) {
-//     console.error('Error fetching bookings:', err);
-//     res.status(500).json({ error: 'Internal server error' });
-//   }
-// });
+app.get('/bookings', async (req: Request, res: Response) => {
+  try {
+    const result = await pool.query(`
+      SELECT b.*, e.title as event_title 
+      FROM bookings b 
+      JOIN events e ON b.event_id = e.id 
+      ORDER BY b.booking_date DESC
+    `);
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error fetching bookings:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 // Create a new booking
 // app.post('/bookings', async (req: Request, res: Response) => {
