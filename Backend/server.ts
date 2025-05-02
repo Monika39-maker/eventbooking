@@ -63,7 +63,7 @@ app.get('/events', async (req: Request, res: Response) => {
 // Get all bookings
 app.get('/bookings', async (req: Request, res: Response) => {
   try {
-    const result = await pool.query(`SELECT *FROM bookings`);
+    const result = await pool.query(`SELECT * FROM bookings`);
     res.json(result.rows);
   } catch (err) {
     console.error('Error fetching bookings:', err);

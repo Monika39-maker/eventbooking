@@ -31,10 +31,10 @@ export type Event = {
 export type Events = Event[]
 export type Booking = {
   id: number;
-  guestName: string;
-  numberOfKids: number;
-  numberOfAdults: number;
   event: string;
+  customer_name: string;
+  number_of_kids: number;
+  number_of_adults: number;
 }
 
 const AdminDashboard: React.FC = () => {
@@ -67,27 +67,29 @@ const AdminDashboard: React.FC = () => {
   useEffect(() => {
     Promise.all([
       fetch('https://eventbooking-api.onrender.com/events'),
-      // fetch('https://eventbooking-api.onrender.com/bookings')
+      fetch('https://eventbooking-api.onrender.com/bookings')
     ])
       .then(responses => Promise.all(responses.map(res => res.json())))
       .then(([eventsData, bookingsData]) => {
         setAllEvents(eventsData);
-        // setBookings(bookingsData);
+        setBookings(bookingsData);
       })
       .catch(error => {
         console.error('Error:', error);
         setAllEvents([]);
         setBookings([]);
       });
-  }, []);
+  }, [selectedEventTitle]);
  
-
+console.log({selectedEventTitle});
   const handleOpen = (eventTitle:string) => {
     setSelectedEventTitle(eventTitle);
     setOpenBookings(true);
+    console.log(selectedEventTitle);
     
   };
-  console.log(allEvents);
+  console.log(bookings);
+  
   const handleClose = () => {
     setOpenBookings(false);
     setSelectedEventTitle(null);
@@ -280,12 +282,12 @@ const AdminDashboard: React.FC = () => {
                 </TableHead>
                 <TableBody>
                   {bookings
-                    .filter((booking) => booking.event === selectedEventTitle)
+                    .filter((booking:Booking) => booking.event === selectedEventTitle)
                     .map((booking) => (
                       <TableRow key={booking.id}>
-                        <TableCell>{booking.guestName}</TableCell>
-                        <TableCell>{booking.numberOfKids}</TableCell>
-                        <TableCell>{booking.numberOfAdults}</TableCell>
+                        <TableCell>{booking.customer_name}</TableCell>
+                        <TableCell>{booking.number_of_kids}</TableCell>
+                        <TableCell>{booking.number_of_adults}</TableCell>
                       </TableRow>
                     ))}
                 </TableBody>
